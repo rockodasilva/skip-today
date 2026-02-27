@@ -119,12 +119,9 @@ class AlarmService : Service() {
                     scheduler.schedule(alarm)
                 }
 
-                // Launch full-screen activity
-                val activityIntent = Intent(this@AlarmService, AlarmActivity::class.java).apply {
-                    putExtra(EXTRA_ALARM_ID, alarmId)
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                }
-                startActivity(activityIntent)
+                // The AlarmActivity is launched via the notification's fullScreenIntent.
+                // Do NOT call startActivity() from here — on Android 10+ background
+                // activity starts are restricted and won't work on real phones.
             } catch (e: Exception) {
                 Log.e(TAG, "Error in alarm coroutine", e)
             }
@@ -250,6 +247,8 @@ class AlarmService : Service() {
         ringtone = null
         vibrator?.cancel()
         vibrator = null
+        // Release the screen wake lock acquired in AlarmReceiver
+        AlarmReceiver.releaseWakeLock()
         super.onDestroy()
     }
 }

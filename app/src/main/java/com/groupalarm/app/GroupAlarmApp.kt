@@ -25,6 +25,7 @@ class GroupAlarmApp : Application() {
         ).apply {
             description = "Notificaciones de alarmas"
             setBypassDnd(true)
+            lockscreenVisibility = android.app.Notification.VISIBILITY_PUBLIC
             setSound(null, null) // Sound is handled by AlarmService
         }
         val manager = getSystemService(NotificationManager::class.java)

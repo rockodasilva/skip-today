@@ -65,9 +65,9 @@ class AlarmActivity : ComponentActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setupLockScreen()
         super.onCreate(savedInstanceState)
 
-        setupLockScreen()
         registerReceiver(finishReceiver, IntentFilter(ACTION_FINISH), RECEIVER_NOT_EXPORTED)
         handleIntent(intent)
 
